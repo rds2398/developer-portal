@@ -7,7 +7,12 @@ interface Props {
 
 export function ThemeProvider({ children }: Props) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      storageKey="developer-portal-theme"
+    >
       {children}
     </NextThemesProvider>
   );

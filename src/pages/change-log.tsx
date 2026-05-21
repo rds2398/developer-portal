@@ -19,14 +19,14 @@ export function ChangelogPage() {
 
   function getBadgeColor(type: string) {
     if (type === "breaking") {
-      return "bg-red-100 text-red-700";
+      return "bg-destructive/15 text-destructive";
     }
 
     if (type === "feature") {
-      return "bg-green-100 text-green-700";
+      return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400";
     }
 
-    return "bg-yellow-100 text-yellow-700";
+    return "bg-amber-500/15 text-amber-700 dark:text-amber-400";
   }
 
   return (
@@ -35,7 +35,7 @@ export function ChangelogPage() {
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">API Changelog</h1>
 
-        <p className="text-gray-500 mt-1 text-sm md:text-base">
+        <p className="text-muted-foreground mt-1 text-sm md:text-base">
           Track API releases, fixes and breaking changes
         </p>
       </div>
@@ -45,7 +45,7 @@ export function ChangelogPage() {
         <select
           value={selectedApi}
           onChange={(e) => setSelectedApi(e.target.value)}
-          className="border rounded-lg p-2 w-full md:w-56"
+          className="border border-input rounded-lg p-2 w-full md:w-56 bg-background text-foreground"
         >
           <option value="all">All APIs</option>
 
@@ -57,7 +57,7 @@ export function ChangelogPage() {
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
-          className="border rounded-lg p-2 w-full md:w-56"
+          className="border border-input rounded-lg p-2 w-full md:w-56 bg-background text-foreground"
         >
           <option value="all">All Types</option>
 
@@ -71,7 +71,7 @@ export function ChangelogPage() {
 
       {/* EMPTY STATE */}
       {filteredLogs.length === 0 && (
-        <div className="border rounded-lg p-8 text-center text-gray-500">
+        <div className="border border-border rounded-lg p-8 text-center text-muted-foreground">
           No changelog entries found
         </div>
       )}
@@ -85,7 +85,7 @@ export function ChangelogPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-semibold">{log.api}</span>
 
-                  <span className="text-sm text-gray-500">{log.version}</span>
+                  <span className="text-sm text-muted-foreground">{log.version}</span>
 
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getBadgeColor(
@@ -98,12 +98,12 @@ export function ChangelogPage() {
 
                 <h2 className="text-lg font-bold break-words">{log.title}</h2>
 
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {log.description}
                 </p>
               </div>
 
-              <div className="text-sm text-gray-500 whitespace-nowrap">
+              <div className="text-sm text-muted-foreground whitespace-nowrap">
                 {log.date}
               </div>
             </div>

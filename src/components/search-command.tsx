@@ -37,10 +37,9 @@ export function SearchCommand() {
 
   return (
     <>
-      {/* BACKDROP */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
           onClick={() => setOpen(false)}
         />
       )}
@@ -49,36 +48,17 @@ export function SearchCommand() {
         open={open}
         onOpenChange={setOpen}
         label="Global Search"
-        className="
-          fixed
-          top-20
-          left-1/2
-          -translate-x-1/2
-          z-50
-          w-[95%]
-          sm:w-[600px]
-          bg-white
-          dark:bg-black
-          border
-          rounded-xl
-          shadow-2xl
-          p-4
-        "
+        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-[95%] sm:w-[600px] bg-popover text-popover-foreground border border-border rounded-xl shadow-2xl p-4"
       >
         <Command.Input
           placeholder="Search endpoints..."
-          className="
-            w-full
-            border
-            p-3
-            rounded-lg
-            outline-none
-            text-sm
-          "
+          className="w-full border border-input bg-background p-3 rounded-lg outline-none text-sm text-foreground placeholder:text-muted-foreground"
         />
 
         <Command.List className="mt-4 max-h-96 overflow-auto">
-          <Command.Empty>No results found.</Command.Empty>
+          <Command.Empty className="text-muted-foreground py-2 text-sm">
+            No results found.
+          </Command.Empty>
 
           {items.map((item, index) => (
             <Command.Item
@@ -89,18 +69,11 @@ export function SearchCommand() {
 
                 setOpen(false);
               }}
-              className="
-                p-3
-                rounded-lg
-                hover:bg-gray-100
-                dark:hover:bg-gray-800
-                cursor-pointer
-                transition
-              "
+              className="p-3 rounded-lg hover:bg-accent hover:text-accent-foreground cursor-pointer transition aria-selected:bg-accent aria-selected:text-accent-foreground"
             >
               <div className="font-medium break-all">{item.title}</div>
 
-              <div className="text-sm text-gray-500 mt-1">
+              <div className="text-sm text-muted-foreground mt-1">
                 {item.description}
               </div>
             </Command.Item>

@@ -77,7 +77,7 @@ export function ApiKeys() {
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">API Key Management</h1>
 
-        <p className="text-gray-500 mt-1">Create and manage API access keys</p>
+        <p className="text-muted-foreground mt-1">Create and manage API access keys</p>
       </div>
 
       {/* CREATE FORM */}
@@ -98,7 +98,7 @@ export function ApiKeys() {
             onChange={(e) =>
               setEnvironment(e.target.value as "sandbox" | "production")
             }
-            className="w-full border rounded-md p-2 bg-background"
+            className="w-full border border-input rounded-md p-2 bg-background text-foreground"
           >
             <option value="sandbox">Sandbox</option>
             <option value="production">Production</option>
@@ -113,7 +113,7 @@ export function ApiKeys() {
           <Button
             onClick={handleCreateKey}
             disabled={!name}
-            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 cursor-pointer "
+            className="w-full md:w-auto cursor-pointer"
           >
             Generate API Key
           </Button>
@@ -123,7 +123,7 @@ export function ApiKeys() {
       {/* EMPTY STATE */}
       {keys.length === 0 && (
         <Card>
-          <CardContent className="py-12 text-center text-gray-500">
+          <CardContent className="py-12 text-center text-muted-foreground">
             No API keys created yet
           </CardContent>
         </Card>
@@ -138,12 +138,12 @@ export function ApiKeys() {
                 <div className="space-y-1 min-w-0">
                   <div className="font-semibold break-all">{key.name}</div>
 
-                  <div className="text-sm text-gray-500 break-all">
+                  <div className="text-sm text-muted-foreground break-all">
                     {key.maskedKey}
                   </div>
 
                   <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="px-2 py-1 rounded bg-gray-200">
+                    <span className="px-2 py-1 rounded bg-muted text-muted-foreground">
                       {key.environment}
                     </span>
 
@@ -158,7 +158,7 @@ export function ApiKeys() {
                 <Button
                   variant="destructive"
                   onClick={() => setRevokeId(key.id)}
-                  className="w-full md:w-auto bg-red-500 cursor-pointer hover:bg-red-600"
+                  className="w-full md:w-auto cursor-pointer"
                 >
                   Revoke
                 </Button>
@@ -176,16 +176,16 @@ export function ApiKeys() {
           </DialogHeader>
 
           <div className="space-y-4">
-            <div className="bg-black text-white p-4 rounded-md break-all text-sm">
+            <div className="bg-muted text-foreground p-4 rounded-md break-all text-sm font-mono">
               {generatedKey}
             </div>
 
-            <div className="text-sm text-yellow-600">
+            <div className="text-sm text-amber-600 dark:text-amber-400">
               This key will only be shown once. Please copy and store it
               securely.
             </div>
 
-            <Button onClick={copyKey} className="w-full bg-blue-600 cursor-pointer">
+            <Button onClick={copyKey} className="w-full cursor-pointer">
               Copy API Key
             </Button>
           </div>
@@ -199,10 +199,10 @@ export function ApiKeys() {
             <AlertDialogTitle>Revoke API Key?</AlertDialogTitle>
           </AlertDialogHeader>
 
-          <p className="text-sm text-gray-500">This action cannot be undone.</p>
+          <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
 
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-gray-600 cursor-pointer">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
 
             <AlertDialogAction
               onClick={() => {
@@ -212,7 +212,7 @@ export function ApiKeys() {
                   toast.error("API Key Revoked");
                 }
               }}
-              className="bg-red-500 hover:bg-red-600 cursor-pointer"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 cursor-pointer"
             >
               Revoke
             </AlertDialogAction>

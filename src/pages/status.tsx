@@ -9,7 +9,7 @@ export function StatusPage() {
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">API Status</h1>
 
-        <p className="text-gray-500 mt-1 text-sm md:text-base">
+        <p className="text-muted-foreground mt-1 text-sm md:text-base">
           Monitor uptime and incident history for all APIs
         </p>
       </div>
@@ -22,7 +22,7 @@ export function StatusPage() {
               <div>
                 <CardTitle className="text-lg">{api.name}</CardTitle>
 
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   90 Day Uptime: {api.uptime}%
                 </p>
               </div>
@@ -30,10 +30,10 @@ export function StatusPage() {
               <div
                 className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                   api.status === "operational"
-                    ? "bg-green-100 text-green-700"
+                    ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
                     : api.status === "degraded"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-red-100 text-red-700"
+                      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                      : "bg-destructive/15 text-destructive"
                 }`}
               >
                 {api.status}
@@ -42,7 +42,7 @@ export function StatusPage() {
 
             <CardContent>
               {api.incidents.length === 0 ? (
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   No incidents reported.
                 </div>
               ) : (
@@ -54,12 +54,12 @@ export function StatusPage() {
                           {incident.title}
                         </h3>
 
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           {incident.date}
                         </span>
                       </div>
 
-                      <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                         {incident.resolution}
                       </p>
                     </div>

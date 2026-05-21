@@ -268,7 +268,7 @@ export function Sandbox() {
               {ep.method} {ep.path}
             </div>
             {ep.summary && (
-              <div className="text-sm text-gray-500">{ep.summary}</div>
+              <div className="text-sm text-muted-foreground">{ep.summary}</div>
             )}
           </div>
         ))}
@@ -344,7 +344,7 @@ export function Sandbox() {
       <button
         onClick={() => requestMutation?.mutate()}
         disabled={requestMutation?.isPending}
-        className="bg-blue-600 text-white px-4 py-2 cursor-pointer"
+        className="bg-primary text-primary-foreground px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors"
       >
         {requestMutation.isPending ? "Sending..." : "Send Request"}
       </button>
@@ -361,13 +361,13 @@ export function Sandbox() {
                 "Response copied to clipboard",
               )
             }
-            className="text-xs bg-gray-800 text-white px-2 py-1 rounded cursor-pointer"
+            className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded cursor-pointer hover:bg-secondary/80 transition-colors"
           >
             Copy Response
           </button>
         </div>
 
-        <pre className="bg-black text-white p-4 rounded-md overflow-auto max-h-96">
+        <pre className="bg-muted text-foreground p-4 rounded-md overflow-auto max-h-96 font-mono text-sm">
           {requestMutation.isPending
             ? "Loading..."
             : requestMutation.data
@@ -381,22 +381,22 @@ export function Sandbox() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <h3 className="font-bold text-lg">Rate Limit Usage</h3>
 
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-muted-foreground">
             Resets in {resetCountdown}s
           </div>
         </div>
 
         {/* Progress */}
-        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-4 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-600 transition-all duration-300"
+            className="h-full bg-primary transition-all duration-300"
             style={{
               width: `${(rateUsed / RATE_LIMIT) * 100}%`,
             }}
           />
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-600">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {rateUsed} / {RATE_LIMIT} requests used
           </span>
@@ -412,14 +412,14 @@ export function Sandbox() {
 
           <button
             onClick={exportHAR}
-            className="bg-gray-600 text-white px-3 py-2 rounded text-sm cursor-pointer"
+            className="bg-secondary text-secondary-foreground px-3 py-2 rounded text-sm cursor-pointer hover:bg-secondary/80 transition-colors"
           >
             Export HAR
           </button>
         </div>
 
         {history.length === 0 ? (
-          <div className="text-sm text-gray-500">No requests yet</div>
+          <div className="text-sm text-muted-foreground">No requests yet</div>
         ) : (
           <div className="space-y-3">
             {history.map((item: any, idx: number) => (
@@ -439,7 +439,7 @@ export function Sandbox() {
               >
                 <div className="space-y-2 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2 py-1 bg-blue-600 text-white rounded text-xs">
+                    <span className="px-2 py-1 bg-primary text-primary-foreground rounded text-xs">
                       {item.method}
                     </span>
 
@@ -448,7 +448,7 @@ export function Sandbox() {
                     </span>
                   </div>
 
-                  <div className="flex gap-4 text-xs text-gray-500 flex-wrap">
+                  <div className="flex gap-4 text-xs text-muted-foreground flex-wrap">
                     <span>Status: {item.status}</span>
 
                     <span>{item.latency} ms</span>
@@ -459,17 +459,7 @@ export function Sandbox() {
 
                 <button
                   onClick={() => replayRequest(item)}
-                  className="
-              bg-blue-600
-              text-white
-              px-3
-              py-2
-              rounded
-              text-sm
-              w-full
-              lg:w-auto
-              cursor-pointer
-            "
+                  className="bg-primary text-primary-foreground px-3 py-2 rounded text-sm w-full lg:w-auto cursor-pointer hover:bg-primary/90 transition-colors"
                 >
                   Replay
                 </button>
@@ -486,7 +476,7 @@ export function Sandbox() {
 
           <button
             onClick={() => copyToClipboard(snippet, "cURL copied!")}
-            className="text-xs bg-gray-800 text-white px-2 py-1 rounded cursor-pointer"
+            className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded cursor-pointer hover:bg-secondary/80 transition-colors"
           >
             Copy cURL
           </button>
@@ -502,7 +492,7 @@ export function Sandbox() {
           <option value="python">Python</option>
         </select>
 
-        <pre className="bg-gray-900 text-white p-4 overflow-auto">
+        <pre className="bg-muted text-foreground p-4 overflow-auto font-mono text-sm rounded-lg">
           {snippet}
         </pre>
       </div>

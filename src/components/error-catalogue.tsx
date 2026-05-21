@@ -9,7 +9,7 @@ export function ErrorCatalogue() {
 
       <div className="overflow-x-auto">
         <table className="w-full border text-sm">
-          <thead className="bg-gray-600">
+          <thead className="bg-muted text-muted-foreground">
             <tr>
               <th className="border p-2 text-left">
                 Code

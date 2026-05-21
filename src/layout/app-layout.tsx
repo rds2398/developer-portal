@@ -15,7 +15,7 @@ export function AppLayout() {
       {/* BODY */}
       <div className="flex flex-1 overflow-hidden">
         {/* SIDEBAR */}
-        <aside className="w-64 shrink-0 border-r overflow-y-auto  md:block">
+        <aside className="w-64 shrink-0 border-r border-border overflow-y-auto md:block">
           <Sidebar />
         </aside>
 

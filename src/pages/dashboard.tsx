@@ -117,7 +117,7 @@ const [currentTime] = useState(() => new Date().getTime());
   if (!history || history.length === 0) {
     return (
       <div className="p-6">
-        <div className="border rounded-xl h-[300px] flex items-center justify-center text-gray-500 text-center px-4">
+        <div className="border border-border rounded-xl h-[300px] flex items-center justify-center text-muted-foreground text-center px-4">
           No analytics data available yet. Start testing APIs in Sandbox.
         </div>
       </div>
@@ -130,7 +130,7 @@ const [currentTime] = useState(() => new Date().getTime());
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">Usage Analytics</h1>
 
-          <p className="text-gray-500 text-sm md:text-base">
+          <p className="text-muted-foreground text-sm md:text-base">
             Monitor API usage, latency, and error rates
           </p>
         </div>
@@ -138,8 +138,10 @@ const [currentTime] = useState(() => new Date().getTime());
         <div className="flex gap-2">
           <button
             onClick={() => setRange("7")}
-            className={`px-4 py-2 rounded-lg border text-sm ${
-              range === "7" ? "bg-black text-white" : "bg-white text-black"
+            className={`px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
+              range === "7"
+                ? "bg-primary text-primary-foreground"
+                : "bg-background text-foreground hover:bg-muted"
             }`}
           >
             Last 7 Days
@@ -147,8 +149,10 @@ const [currentTime] = useState(() => new Date().getTime());
 
           <button
             onClick={() => setRange("30")}
-            className={`px-4 py-2 rounded-lg border text-sm ${
-              range === "30" ? "bg-black text-white" : "bg-white text-black"
+            className={`px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
+              range === "30"
+                ? "bg-primary text-primary-foreground"
+                : "bg-background text-foreground hover:bg-muted"
             }`}
           >
             Last 30 Days
@@ -159,7 +163,7 @@ const [currentTime] = useState(() => new Date().getTime());
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm text-gray-500">
+            <CardTitle className="text-sm text-muted-foreground">
               Total Requests
             </CardTitle>
           </CardHeader>
@@ -171,7 +175,7 @@ const [currentTime] = useState(() => new Date().getTime());
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm text-gray-500">Avg Latency</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Avg Latency</CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -181,7 +185,7 @@ const [currentTime] = useState(() => new Date().getTime());
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm text-gray-500">4xx Errors</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">4xx Errors</CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -191,7 +195,7 @@ const [currentTime] = useState(() => new Date().getTime());
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm text-gray-500">5xx Errors</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">5xx Errors</CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -201,7 +205,7 @@ const [currentTime] = useState(() => new Date().getTime());
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm text-gray-500">
+            <CardTitle className="text-sm text-muted-foreground">
               Success Rate
             </CardTitle>
           </CardHeader>

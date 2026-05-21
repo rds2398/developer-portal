@@ -57,7 +57,7 @@ export function Chart({ data }: Props) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center border rounded text-gray-500">
+      <div className="h-[300px] flex items-center justify-center border border-border rounded text-muted-foreground">
         No API data available
       </div>
     );

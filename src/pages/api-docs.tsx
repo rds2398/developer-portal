@@ -53,7 +53,7 @@ export function ApiDocs() {
   if (isError) {
     return (
       <div className="p-4 md:p-6">
-        <div className="border border-red-300 bg-red-50 text-red-600 rounded-lg p-4">
+        <div className="border border-destructive/50 bg-destructive/10 text-destructive rounded-lg p-4">
           Failed to load API documentation
         </div>
       </div>
@@ -63,7 +63,7 @@ export function ApiDocs() {
   if (!data) {
     return (
       <div className="p-4 md:p-6">
-        <div className="border rounded-lg p-6 text-gray-500 text-center">
+        <div className="border border-border rounded-lg p-6 text-muted-foreground text-center">
           API not found
         </div>
       </div>
@@ -78,7 +78,7 @@ export function ApiDocs() {
           {data.api.name}
         </h1>
 
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Version: {data.api.version}
         </p>
       </div>
@@ -104,7 +104,7 @@ export function ApiDocs() {
                 href={sdk.url}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-600 transition text-center break-all"
+                className="w-full sm:w-auto px-4 py-2 border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition text-center break-all"
               >
                 {sdk.name}
               </a>
@@ -126,7 +126,7 @@ export function ApiDocs() {
           >
             {/* METHOD + PATH */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 break-all">
-              <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-xs uppercase w-fit">
+              <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs uppercase w-fit">
                 {ep.method}
               </span>
 
@@ -137,7 +137,7 @@ export function ApiDocs() {
 
             {/* SUMMARY */}
             {ep.summary && (
-              <p className="text-gray-600 break-words">
+              <p className="text-muted-foreground break-words">
                 {ep.summary}
               </p>
             )}
@@ -151,7 +151,7 @@ export function ApiDocs() {
 
                 <div className="w-full overflow-x-auto rounded-lg">
                   <table className="min-w-[700px] w-full border text-sm">
-                    <thead className="bg-gray-600">
+                    <thead className="bg-muted text-muted-foreground">
                       <tr>
                         <th className="border p-2 text-left">
                           Name
@@ -206,7 +206,7 @@ export function ApiDocs() {
                   Request Body
                 </h3>
 
-                <pre className="bg-black text-white p-3 md:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
+                <pre className="bg-muted text-foreground p-3 md:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm font-mono">
                   {JSON.stringify(ep.requestBody, null, 2)}
                 </pre>
               </div>
@@ -230,7 +230,7 @@ export function ApiDocs() {
                           Status: {code}
                         </div>
 
-                        <pre className="overflow-x-auto text-xs sm:text-sm bg-gray-600 p-3 rounded">
+                        <pre className="overflow-x-auto text-xs sm:text-sm bg-muted text-foreground p-3 rounded font-mono">
                           {JSON.stringify(response, null, 2)}
                         </pre>
                       </div>
