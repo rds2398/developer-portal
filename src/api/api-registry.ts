@@ -1,6 +1,7 @@
 import type { OpenAPIV3 } from "openapi-types";
 import pokeApiSpec from "./pokeapi/openapi.json";
 import dummyJsonSpec from "./dummy/openapi.json";
+import jsonPlaceholderSpec from "./typeicode/opeapi.json"
 
 export interface ApiDefinition {
   id: string;
@@ -41,5 +42,23 @@ export const API_REGISTRY: ApiDefinition[] = [
     baseUrl: "https://dummyjson.com",
     spec: dummyJsonSpec,
     docsFile: "/src/apis/dummyjson/docs.md",
+  },
+  {
+    id: "jsonplaceholder",
+    name: "JSONPlaceholder",
+    version: "1.0.0",
+    baseUrl: "https://jsonplaceholder.typicode.com",
+    spec: jsonPlaceholderSpec,
+    docsFile: "/src/apis/jsonplaceholder/docs.md",
+    sdkLinks: [
+      {
+        name: "Guide",
+        url: "https://jsonplaceholder.typicode.com/guide/",
+      },
+      {
+        name: "GitHub",
+        url: "https://github.com/typicode/jsonplaceholder",
+      },
+    ],
   },
 ];

@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/header";
 
 export function AppLayout() {
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
+    <div className="h-screen bg-background overflow-hidden flex flex-col">
       {/* HEADER */}
       <Header />
 

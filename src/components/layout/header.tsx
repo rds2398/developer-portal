@@ -9,7 +9,7 @@ export function Header() {
         border-b
         bg-white/80
         backdrop-blur-md
-        dark:bg-black/80
+       
       "
     >
       <div
