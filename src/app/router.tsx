@@ -7,6 +7,7 @@ import { ProtectedRoute } from "@/route/protected-route";
 import { AppLayout } from "@/layout/app-layout";
 import { ApiDocs } from "@/pages/api-docs";
 import { Sandbox } from "@/pages/sandbox";
+import { ApiKeys } from "@/pages/api-key";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "sandbox",
         element: <Sandbox />,
+      },
+      {
+        path: "api-keys",
+        element: <ApiKeys />,
       },
       {
         path: "api/:apiId",

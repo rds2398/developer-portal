@@ -1,7 +1,17 @@
-import {  NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { API_REGISTRY } from "@/api/api-registry";
+import { supabase } from "@/lib/supabase";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export function Sidebar() {
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    toast.success("Log out successfully");
+    navigate("/login");
+  }
   return (
     <div className="w-64 border-r p-4">
       <h2 className="font-bold mb-4">Developer Portal</h2>
@@ -28,6 +38,16 @@ export function Sidebar() {
         >
           Sandbox
         </NavLink>
+        <NavLink
+          to="/api-keys"
+          className={({ isActive }) =>
+            `block p-2 rounded ${
+              isActive ? "bg-gray-600 text-white" : "hover:bg-gray-600"
+            }`
+          }
+        >
+          API Keys
+        </NavLink>
       </div>
 
       <div className="mt-4 text-xs text-gray-500">APIs</div>
@@ -47,6 +67,13 @@ export function Sidebar() {
           </NavLink>
         ))}
       </div>
+
+      <button
+        onClick={handleLogout}
+        className="mt-6 w-full p-2 rounded bg-red-500 text-white hover:bg-red-600"
+      >
+        Logout
+      </button>
     </div>
   );
 }

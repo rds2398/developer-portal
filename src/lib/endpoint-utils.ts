@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface Endpoint {
   method: string;
   path: string;
   summary?: string;
+
+  parameters?: any[];
+  requestBody?: any;
+  responses?: any;
+
   pathParams: string[];
   queryParams: string[];
 }
@@ -18,14 +24,24 @@ export function extractEndpoints(spec: any): Endpoint[] {
       const queryParams: string[] = [];
 
       (config?.parameters || []).forEach((p: any) => {
-        if (p.in === "path") pathParams.push(p.name);
-        if (p.in === "query") queryParams.push(p.name);
+        if (p.in === "path") {
+          pathParams.push(p.name);
+        }
+
+        if (p.in === "query") {
+          queryParams.push(p.name);
+        }
       });
 
       endpoints.push({
         method: method.toUpperCase(),
         path,
         summary: config?.summary,
+
+        parameters: config?.parameters || [],
+        requestBody: config?.requestBody || null,
+        responses: config?.responses || {},
+
         pathParams,
         queryParams,
       });

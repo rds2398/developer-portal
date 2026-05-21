@@ -9,6 +9,10 @@ export interface ApiDefinition {
   baseUrl: string;
   spec: OpenAPIV3.Document;
   docsFile?: string;
+  sdkLinks?: {
+  name: string;
+  url: string;
+}[];
 }
 
 export const API_REGISTRY: ApiDefinition[] = [
@@ -19,6 +23,16 @@ export const API_REGISTRY: ApiDefinition[] = [
     baseUrl: "https://pokeapi.co/api/v2",
     spec: pokeApiSpec,
     docsFile: "/src/apis/pokeapi/docs.md",
+    sdkLinks: [
+    {
+      name: "JavaScript SDK",
+      url: "https://github.com/PokeAPI/pokedex-promise-v2",
+    },
+    {
+      name: "Python SDK",
+      url: "https://pokeapi.github.io/pokepy/",
+    },
+  ],
   },
   {
     id: "dummyjson",
