@@ -48,14 +48,14 @@ export function SearchCommand() {
         open={open}
         onOpenChange={setOpen}
         label="Global Search"
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-[95%] sm:w-[600px] bg-popover text-popover-foreground border border-border rounded-xl shadow-2xl p-4"
+        className="fixed top-[4.5rem] sm:top-20 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-[600px] max-h-[min(85dvh,32rem)] flex flex-col bg-popover text-popover-foreground border border-border rounded-xl shadow-2xl p-3 sm:p-4 mx-3 sm:mx-0"
       >
         <Command.Input
           placeholder="Search endpoints..."
           className="w-full border border-input bg-background p-3 rounded-lg outline-none text-sm text-foreground placeholder:text-muted-foreground"
         />
 
-        <Command.List className="mt-4 max-h-96 overflow-auto">
+        <Command.List className="mt-3 sm:mt-4 flex-1 min-h-0 max-h-[50dvh] sm:max-h-96 overflow-auto">
           <Command.Empty className="text-muted-foreground py-2 text-sm">
             No results found.
           </Command.Empty>

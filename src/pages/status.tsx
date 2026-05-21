@@ -18,9 +18,9 @@ export function StatusPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {API_STATUS.map((api) => (
           <Card key={api.id}>
-            <CardHeader className="flex flex-row items-start justify-between gap-4">
-              <div>
-                <CardTitle className="text-lg">{api.name}</CardTitle>
+            <CardHeader className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
+              <div className="min-w-0">
+                <CardTitle className="text-base sm:text-lg break-words">{api.name}</CardTitle>
 
                 <p className="text-sm text-muted-foreground mt-1">
                   90 Day Uptime: {api.uptime}%

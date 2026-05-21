@@ -18,75 +18,90 @@ import { Button } from "@/components/ui/button";
 
 function navLinkClass(isActive: boolean, block = false) {
   return cn(
-    block ? "block p-2 rounded transition-colors" : "flex items-center gap-2 p-2 rounded transition-colors",
+    block
+      ? "block p-2.5 rounded-lg transition-colors text-sm sm:text-base"
+      : "flex items-center gap-2 p-2.5 rounded-lg transition-colors text-sm sm:text-base",
     isActive
       ? "bg-accent text-accent-foreground"
       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
   );
 }
 
-export function Sidebar() {
+type SidebarProps = {
+  onNavigate?: () => void;
+};
+
+export function Sidebar({ onNavigate }: SidebarProps) {
   const navigate = useNavigate();
 
   async function handleLogout() {
     await supabase.auth.signOut();
     toast.success("Log out successfully");
+    onNavigate?.();
     navigate("/login");
   }
 
   return (
-    <div className="w-64 border-r border-border p-4 bg-sidebar text-sidebar-foreground">
-      <h2 className="font-bold mb-4">Developer Portal</h2>
+    <div className="flex h-full flex-col w-full p-3 sm:p-4 bg-sidebar text-sidebar-foreground overflow-y-auto">
+      <h2 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base shrink-0">
+        Developer Portal
+      </h2>
 
-      <div className="space-y-2 mb-4">
+      <div className="space-y-1 sm:space-y-2 mb-3 sm:mb-4">
         <NavLink
           to="/"
+          onClick={onNavigate}
           className={({ isActive }) => navLinkClass(isActive)}
         >
-          <LayoutDashboard size={18} />
+          <LayoutDashboard size={18} className="shrink-0" />
           Dashboard
         </NavLink>
 
         <NavLink
           to="/sandbox"
+          onClick={onNavigate}
           className={({ isActive }) => navLinkClass(isActive)}
         >
-          <FlaskConical size={18} />
+          <FlaskConical size={18} className="shrink-0" />
           Sandbox
         </NavLink>
 
         <NavLink
           to="/api-keys"
+          onClick={onNavigate}
           className={({ isActive }) => navLinkClass(isActive)}
         >
-          <KeyRound size={18} />
+          <KeyRound size={18} className="shrink-0" />
           API Keys
         </NavLink>
 
         <NavLink
-          to="/changeLog"
+          to="/changelog"
+          onClick={onNavigate}
           className={({ isActive }) => navLinkClass(isActive)}
         >
-          <ScrollText size={18} />
+          <ScrollText size={18} className="shrink-0" />
           Change Logs
         </NavLink>
 
         <NavLink
           to="/status"
+          onClick={onNavigate}
           className={({ isActive }) => navLinkClass(isActive)}
         >
-          <Activity size={18} />
+          <Activity size={18} className="shrink-0" />
           API Status
         </NavLink>
       </div>
 
-      <div className="mt-4 text-xs text-muted-foreground">APIs</div>
+      <div className="mt-2 sm:mt-4 text-xs text-muted-foreground shrink-0">APIs</div>
 
-      <div className="space-y-2 mt-2">
+      <div className="space-y-1 sm:space-y-2 mt-1 sm:mt-2 flex-1 min-h-0 overflow-y-auto">
         {API_REGISTRY.map((api) => (
           <NavLink
             key={api.id}
             to={`/api/${api.id}`}
+            onClick={onNavigate}
             className={({ isActive }) => navLinkClass(isActive, true)}
           >
             {api.name}
@@ -96,7 +111,7 @@ export function Sidebar() {
 
       <Button
         variant="destructive"
-        className="mt-6 w-full cursor-pointer"
+        className="mt-4 sm:mt-6 w-full cursor-pointer shrink-0"
         onClick={handleLogout}
       >
         <LogOut size={18} />

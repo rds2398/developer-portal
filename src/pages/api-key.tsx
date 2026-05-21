@@ -170,7 +170,7 @@ export function ApiKeys() {
 
       {/* SHOW FULL KEY ONCE */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Your API Key</DialogTitle>
           </DialogHeader>
@@ -201,8 +201,8 @@ export function ApiKeys() {
 
           <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
 
-          <AlertDialogFooter>
-            <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col-reverse sm:flex-row gap-2">
+            <AlertDialogCancel className="w-full sm:w-auto cursor-pointer">Cancel</AlertDialogCancel>
 
             <AlertDialogAction
               onClick={() => {
@@ -212,7 +212,7 @@ export function ApiKeys() {
                   toast.error("API Key Revoked");
                 }
               }}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 cursor-pointer"
+              className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90 cursor-pointer"
             >
               Revoke
             </AlertDialogAction>

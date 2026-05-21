@@ -1,7 +1,12 @@
 import type { OpenAPIV3 } from "openapi-types";
 import pokeApiSpec from "./pokeapi/openapi.json";
 import dummyJsonSpec from "./dummy/openapi.json";
-import jsonPlaceholderSpec from "./typeicode/opeapi.json"
+import jsonPlaceholderSpec from "./typeicode/opeapi.json";
+
+/** JSON imports are widened; assert once at the registry boundary. */
+function openApiDocument(spec: unknown): OpenAPIV3.Document {
+  return spec as OpenAPIV3.Document;
+}
 
 export interface ApiDefinition {
   id: string;
@@ -22,7 +27,7 @@ export const API_REGISTRY: ApiDefinition[] = [
     name: "PokéAPI",
     version: "1.0.0",
     baseUrl: "https://pokeapi.co/api/v2",
-    spec: pokeApiSpec,
+    spec: openApiDocument(pokeApiSpec),
     docsFile: "/src/apis/pokeapi/docs.md",
     sdkLinks: [
     {
@@ -40,7 +45,7 @@ export const API_REGISTRY: ApiDefinition[] = [
     name: "DummyJSON",
     version: "1.0.0",
     baseUrl: "https://dummyjson.com",
-    spec: dummyJsonSpec,
+    spec: openApiDocument(dummyJsonSpec),
     docsFile: "/src/apis/dummyjson/docs.md",
   },
   {
@@ -48,7 +53,7 @@ export const API_REGISTRY: ApiDefinition[] = [
     name: "JSONPlaceholder",
     version: "1.0.0",
     baseUrl: "https://jsonplaceholder.typicode.com",
-    spec: jsonPlaceholderSpec,
+    spec: openApiDocument(jsonPlaceholderSpec),
     docsFile: "/src/apis/jsonplaceholder/docs.md",
     sdkLinks: [
       {

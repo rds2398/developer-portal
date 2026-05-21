@@ -103,7 +103,7 @@ export function ChangelogPage() {
                 </p>
               </div>
 
-              <div className="text-sm text-muted-foreground whitespace-nowrap">
+              <div className="text-sm text-muted-foreground md:whitespace-nowrap shrink-0">
                 {log.date}
               </div>
             </div>

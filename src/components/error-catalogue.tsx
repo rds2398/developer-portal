@@ -7,8 +7,8 @@ export function ErrorCatalogue() {
         Error Catalogue
       </h2>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border text-sm">
+      <div className="overflow-x-auto -mx-1 px-1 rounded-lg">
+        <table className="w-full min-w-[640px] border border-border text-sm">
           <thead className="bg-muted text-muted-foreground">
             <tr>
               <th className="border p-2 text-left">

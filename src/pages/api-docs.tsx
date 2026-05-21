@@ -15,7 +15,7 @@ export function ApiDocs() {
       <div className="p-4 md:p-6 space-y-6 overflow-x-hidden">
         <div className="space-y-2">
           <Skeleton className="h-8 w-52" />
-          <Skeleton className="h-4 w-80" />
+          <Skeleton className="h-4 w-full max-w-80" />
         </div>
 
         <div className="space-y-4">
@@ -149,8 +149,8 @@ export function ApiDocs() {
                   Parameters
                 </h3>
 
-                <div className="w-full overflow-x-auto rounded-lg">
-                  <table className="min-w-[700px] w-full border text-sm">
+                <div className="w-full overflow-x-auto -mx-1 px-1 rounded-lg">
+                  <table className="min-w-[560px] sm:min-w-[700px] w-full border border-border text-sm">
                     <thead className="bg-muted text-muted-foreground">
                       <tr>
                         <th className="border p-2 text-left">

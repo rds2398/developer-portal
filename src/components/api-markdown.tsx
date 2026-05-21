@@ -15,7 +15,7 @@ export function ApiMarkdown({ file }: Props) {
   }, [file]);
 
   return (
-    <div className="prose max-w-none">
+    <div className="prose prose-sm sm:prose-base max-w-none break-words overflow-x-auto [&_pre]:overflow-x-auto [&_table]:block [&_table]:overflow-x-auto">
       <ReactMarkdown>
         {content}
       </ReactMarkdown>

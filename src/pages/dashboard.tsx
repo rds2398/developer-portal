@@ -116,8 +116,8 @@ const [currentTime] = useState(() => new Date().getTime());
 
   if (!history || history.length === 0) {
     return (
-      <div className="p-6">
-        <div className="border border-border rounded-xl h-[300px] flex items-center justify-center text-muted-foreground text-center px-4">
+      <div className="p-4 sm:p-6">
+        <div className="border border-border rounded-xl min-h-[200px] sm:h-[300px] flex items-center justify-center text-muted-foreground text-center px-4 text-sm sm:text-base">
           No analytics data available yet. Start testing APIs in Sandbox.
         </div>
       </div>
@@ -135,10 +135,10 @@ const [currentTime] = useState(() => new Date().getTime());
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           <button
             onClick={() => setRange("7")}
-            className={`px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
+            className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
               range === "7"
                 ? "bg-primary text-primary-foreground"
                 : "bg-background text-foreground hover:bg-muted"
@@ -149,7 +149,7 @@ const [currentTime] = useState(() => new Date().getTime());
 
           <button
             onClick={() => setRange("30")}
-            className={`px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
+            className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg border border-border text-sm transition-colors ${
               range === "30"
                 ? "bg-primary text-primary-foreground"
                 : "bg-background text-foreground hover:bg-muted"
@@ -223,14 +223,21 @@ const [currentTime] = useState(() => new Date().getTime());
           </CardHeader>
 
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer>
-                <LineChart data={lineChartData}>
+            <div className="w-full min-w-0 h-[220px] sm:h-[280px] md:h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={lineChartData} margin={{ left: -10, right: 8, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" />
 
-                  <XAxis dataKey="time" />
+                  <XAxis
+                    dataKey="time"
+                    tick={{ fontSize: 10 }}
+                    angle={-35}
+                    textAnchor="end"
+                    height={50}
+                    interval="preserveStartEnd"
+                  />
 
-                  <YAxis />
+                  <YAxis tick={{ fontSize: 10 }} width={40} />
 
                   <Tooltip />
 
@@ -247,14 +254,21 @@ const [currentTime] = useState(() => new Date().getTime());
           </CardHeader>
 
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer>
-                <BarChart data={barChartData}>
+            <div className="w-full min-w-0 h-[220px] sm:h-[280px] md:h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barChartData} margin={{ left: -10, right: 8, bottom: 50 }}>
                   <CartesianGrid strokeDasharray="3 3" />
 
-                  <XAxis dataKey="endpoint" />
+                  <XAxis
+                    dataKey="endpoint"
+                    tick={{ fontSize: 10 }}
+                    angle={-35}
+                    textAnchor="end"
+                    height={50}
+                    interval={0}
+                  />
 
-                  <YAxis />
+                  <YAxis tick={{ fontSize: 10 }} width={40} />
 
                   <Tooltip formatter={(value) => [`${value} ms`, "Latency"]} />
 
@@ -272,8 +286,8 @@ const [currentTime] = useState(() => new Date().getTime());
         </CardHeader>
 
         <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto -mx-1 px-1">
+            <Table className="min-w-[480px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Endpoint</TableHead>
@@ -286,7 +300,7 @@ const [currentTime] = useState(() => new Date().getTime());
               <TableBody>
                 {endpointTable.map((item, idx) => (
                   <TableRow key={idx}>
-                    <TableCell className="max-w-[250px] break-all">
+                    <TableCell className="max-w-[120px] sm:max-w-[200px] md:max-w-[250px] break-all">
                       {item.endpoint}
                     </TableCell>
 

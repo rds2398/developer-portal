@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from "react";
 import { API_REGISTRY } from "@/api/api-registry";
@@ -17,7 +16,6 @@ import { useApiHistory } from "@/store/api-history";
 export function Sandbox() {
   const { addHistory } = useApiHistory.getState();
   const history = useApiHistory((state) => state.history);
-  const [session, setSession] = useState<any>(null);
   const [selectedApi, setSelectedApi] = useState("pokeapi");
   const [selectedEndpoint, setSelectedEndpoint] = useState<Endpoint | null>(
     null,
@@ -65,9 +63,7 @@ export function Sandbox() {
 
   async function getSessionToken() {
     const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
-    setSession(data.session);
-    return token;
+    return data.session?.access_token;
   }
 
   function buildUrl() {
@@ -235,14 +231,14 @@ export function Sandbox() {
   }
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl md:text-3xl font-bold">API Sandbox</h1>
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-full overflow-x-hidden">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">API Sandbox</h1>
 
       {/* API Selector */}
       <select
         value={selectedApi}
         onChange={(e) => setSelectedApi(e.target.value)}
-        className="border p-2 cursor-pointer"
+        className="w-full max-w-full border border-input rounded-lg p-2.5 bg-background text-foreground cursor-pointer text-sm sm:text-base"
       >
         {API_REGISTRY.map((api) => (
           <option key={api.id} value={api.id}>
@@ -262,9 +258,9 @@ export function Sandbox() {
               setQueryValues({});
               setBody("");
             }}
-            className="p-2 border cursor-pointer"
+            className="p-3 sm:p-4 border border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
           >
-            <div className="font-bold">
+            <div className="font-bold text-sm sm:text-base break-all">
               {ep.method} {ep.path}
             </div>
             {ep.summary && (
@@ -279,7 +275,7 @@ export function Sandbox() {
         <input
           key={param}
           placeholder={`path: ${param}`}
-          className="border p-2 block"
+          className="w-full border border-input rounded-lg p-2.5 bg-background text-foreground text-sm sm:text-base block"
           onChange={(e) =>
             setPathValues({
               ...pathValues,
@@ -294,7 +290,7 @@ export function Sandbox() {
         <input
           key={param}
           placeholder={`query: ${param}`}
-          className="border p-2 block"
+          className="w-full border border-input rounded-lg p-2.5 bg-background text-foreground text-sm sm:text-base block"
           onChange={(e) =>
             setQueryValues({
               ...queryValues,
@@ -306,36 +302,38 @@ export function Sandbox() {
 
       {/* Headers */}
       <div className="space-y-2">
-        <h3 className="font-bold">Headers</h3>
+        <h3 className="font-bold text-sm sm:text-base">Headers</h3>
 
-        <input
-          placeholder="Header Key"
-          className="border p-2 mr-2"
-          onChange={(e) =>
-            setHeaders((prev) => ({
-              ...prev,
-              key: e.target.value,
-            }))
-          }
-        />
+        <div className="flex flex-col sm:flex-row gap-2">
+          <input
+            placeholder="Header Key"
+            className="w-full border border-input rounded-lg p-2.5 bg-background text-foreground text-sm sm:text-base"
+            onChange={(e) =>
+              setHeaders((prev) => ({
+                ...prev,
+                key: e.target.value,
+              }))
+            }
+          />
 
-        <input
-          placeholder="Header Value"
-          className="border p-2"
-          onChange={(e) =>
-            setHeaders((prev) => ({
-              ...prev,
-              value: e.target.value,
-            }))
-          }
-        />
+          <input
+            placeholder="Header Value"
+            className="w-full border border-input rounded-lg p-2.5 bg-background text-foreground text-sm sm:text-base"
+            onChange={(e) =>
+              setHeaders((prev) => ({
+                ...prev,
+                value: e.target.value,
+              }))
+            }
+          />
+        </div>
       </div>
 
       {/* Body */}
       {selectedEndpoint?.method !== "GET" && (
         <textarea
           placeholder='{"key":"value"}'
-          className="border p-2 w-full h-28 font-mono"
+          className="border border-input rounded-lg p-2.5 w-full min-h-28 h-28 sm:h-32 font-mono text-xs sm:text-sm bg-background text-foreground"
           value={body}
           onChange={(e) => setBody(e.target.value)}
         />
@@ -344,15 +342,15 @@ export function Sandbox() {
       <button
         onClick={() => requestMutation?.mutate()}
         disabled={requestMutation?.isPending}
-        className="bg-primary text-primary-foreground px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors"
+        className="w-full sm:w-auto bg-primary text-primary-foreground px-4 py-2.5 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors text-sm sm:text-base"
       >
         {requestMutation.isPending ? "Sending..." : "Send Request"}
       </button>
 
       {/* Response */}
       <div className="mt-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold">Response</h3>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+          <h3 className="font-bold text-sm sm:text-base">Response</h3>
 
           <button
             onClick={() =>
@@ -367,7 +365,7 @@ export function Sandbox() {
           </button>
         </div>
 
-        <pre className="bg-muted text-foreground p-4 rounded-md overflow-auto max-h-96 font-mono text-sm">
+        <pre className="bg-muted text-foreground p-3 sm:p-4 rounded-lg overflow-x-auto max-h-64 sm:max-h-96 font-mono text-xs sm:text-sm">
           {requestMutation.isPending
             ? "Loading..."
             : requestMutation.data
@@ -377,9 +375,9 @@ export function Sandbox() {
       </div>
 
       {/* RATE LIMIT VISUALISER */}
-      <div className="mt-6 border rounded-lg p-4 space-y-4">
+      <div className="mt-4 sm:mt-6 border border-border rounded-lg p-3 sm:p-4 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <h3 className="font-bold text-lg">Rate Limit Usage</h3>
+          <h3 className="font-bold text-base sm:text-lg">Rate Limit Usage</h3>
 
           <div className="text-sm text-muted-foreground">
             Resets in {resetCountdown}s
@@ -406,13 +404,13 @@ export function Sandbox() {
       </div>
 
       {/* REQUEST HISTORY */}
-      <div className="mt-6 border rounded-lg p-4 space-y-4">
+      <div className="mt-4 sm:mt-6 border border-border rounded-lg p-3 sm:p-4 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <h3 className="font-bold text-lg">Sandbox Request Log</h3>
+          <h3 className="font-bold text-base sm:text-lg">Sandbox Request Log</h3>
 
           <button
             onClick={exportHAR}
-            className="bg-secondary text-secondary-foreground px-3 py-2 rounded text-sm cursor-pointer hover:bg-secondary/80 transition-colors"
+            className="w-full sm:w-auto bg-secondary text-secondary-foreground px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-secondary/80 transition-colors"
           >
             Export HAR
           </button>
@@ -471,8 +469,8 @@ export function Sandbox() {
 
       {/* SNIPPET */}
       <div className="mt-6 space-y-2">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">Code Snippet</h3>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <h3 className="font-bold text-sm sm:text-base">Code Snippet</h3>
 
           <button
             onClick={() => copyToClipboard(snippet, "cURL copied!")}
@@ -485,14 +483,14 @@ export function Sandbox() {
         <select
           value={snippetType}
           onChange={(e) => setSnippetType(e.target.value as any)}
-          className="border p-2"
+          className="w-full sm:w-auto border border-input rounded-lg p-2.5 bg-background text-foreground text-sm sm:text-base"
         >
           <option value="curl">cURL</option>
           <option value="fetch">JavaScript</option>
           <option value="python">Python</option>
         </select>
 
-        <pre className="bg-muted text-foreground p-4 overflow-auto font-mono text-sm rounded-lg">
+        <pre className="bg-muted text-foreground p-3 sm:p-4 overflow-x-auto font-mono text-xs sm:text-sm rounded-lg max-w-full">
           {snippet}
         </pre>
       </div>
