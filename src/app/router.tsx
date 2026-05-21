@@ -18,7 +18,6 @@ export const router = createBrowserRouter([
     element: <Signup />,
   },
 
-  // 🔥 ALL PROTECTED APP ROUTES UNDER ONE LAYOUT
   {
     path: "/",
     element: (

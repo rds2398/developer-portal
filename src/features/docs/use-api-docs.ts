@@ -1,18 +1,25 @@
-import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { API_REGISTRY } from "@/api/api-registry";
-import { parseOpenAPISpec } from "@/lib/spec-parser";
 
-export function useApiDocs(apiId: string) {
-  return useMemo(() => {
-    const api = API_REGISTRY.find((a) => a.id === apiId);
+function getApiDocs(apiId: string) {
+  const api = API_REGISTRY.find((a) => a.id === apiId);
 
-    if (!api) return null;
+  if (!api) throw new Error("API not found");
 
-    const parsed = parseOpenAPISpec(api.spec);
+  return {
+    api,
+    endpoints: Object.keys(api.spec.paths || {}).map((path) => ({
+      path,
+      method: "get",
+      summary: "",
+    })),
+  };
+}
 
-    return {
-      api,
-      endpoints: parsed.endpoints,
-    };
-  }, [apiId]);
+export function useApiDocs(apiId?: string) {
+  return useQuery({
+    queryKey: ["api-docs", apiId],
+    queryFn: () => getApiDocs(apiId!),
+    enabled: !!apiId,
+  });
 }

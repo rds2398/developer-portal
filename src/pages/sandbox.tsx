@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from "react";
 import { API_REGISTRY } from "@/api/api-registry";
@@ -9,10 +10,13 @@ import {
   generateFetch,
   generatePython,
 } from "@/lib/snippet-generator";
-
+import { useMutation } from "@tanstack/react-query";
+import { sendRequest } from "@/services/send-request";
+import { toast } from "sonner";
+import { useApiHistory } from "@/store/api-history";
 export function Sandbox() {
+  const { addHistory } = useApiHistory.getState();
   const [session, setSession] = useState<any>(null);
-
   const [selectedApi, setSelectedApi] = useState("pokeapi");
   const [selectedEndpoint, setSelectedEndpoint] = useState<Endpoint | null>(
     null,
@@ -24,13 +28,12 @@ export function Sandbox() {
   const [pathValues, setPathValues] = useState<Record<string, string>>({});
   const [queryValues, setQueryValues] = useState<Record<string, string>>({});
 
-  const [response, setResponse] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-
   const api = API_REGISTRY.find((a) => a.id === selectedApi)!;
+
   const [snippetType, setSnippetType] = useState<"curl" | "fetch" | "python">(
     "curl",
   );
+
   const endpoints = useMemo(() => {
     return extractEndpoints(api.spec);
   }, [api]);
@@ -57,60 +60,26 @@ export function Sandbox() {
     return url;
   }
 
-  async function sendRequest() {
-    const url = buildUrl();
-    if (!url || !selectedEndpoint) return;
-
-    try {
-      setLoading(true);
-
-      const token = await getSessionToken();
-
-      const finalHeaders: Record<string, string> = {
-        "Content-Type": "application/json",
-        ...headers,
-      };
-
-      if (token) {
-        finalHeaders["Authorization"] = `Bearer ${token}`;
-      }
-
-      let parsedBody: any = undefined;
-
-      if (selectedEndpoint.method !== "GET" && body?.trim()) {
-        try {
-          parsedBody = JSON.parse(body);
-        } catch {
-          parsedBody = body; // fallback raw string
-        }
-      }
-
-      const start = performance.now();
-
-      const res = await fetch(url, {
-        method: selectedEndpoint.method,
-        headers: finalHeaders,
-        body: parsedBody ? JSON.stringify(parsedBody) : undefined,
+  const requestMutation = useMutation({
+    mutationFn: async () => {
+      return sendRequest({
+        url: buildUrl(),
+        selectedEndpoint,
+        headers,
+        body,
+        getSessionToken,
       });
-
-      const data = await res.json();
-
-      const end = performance.now();
-
-      setResponse({
-        status: res.status,
-        latency: Math.round(end - start),
-        data,
+    },
+    onSuccess: (response) => {
+      addHistory({
+        url: buildUrl(),
+        method: selectedEndpoint?.method || "GET",
+        status: response?.status,
+        latency: response?.latency,
+        timestamp: Date.now(),
       });
-    } catch (err) {
-      setResponse({
-        error: "Request failed",
-        details: String(err),
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
+    },
+  });
 
   const url = buildUrl();
 
@@ -140,6 +109,12 @@ export function Sandbox() {
       body ? JSON.parse(body || "{}") : undefined,
     );
   }, [snippetType, selectedEndpoint, url, headers, body]);
+
+  function copyToClipboard(text: string, label: string) {
+    navigator.clipboard.writeText(text);
+
+    toast.success(label);
+  }
 
   return (
     <div className="p-6 space-y-4">
@@ -211,7 +186,7 @@ export function Sandbox() {
         />
       ))}
 
-      {/* Headers UI FIX (now proper merging instead of overwrite bug) */}
+      {/* Headers */}
       <div className="space-y-2">
         <h3 className="font-bold">Headers</h3>
 
@@ -248,26 +223,53 @@ export function Sandbox() {
         />
       )}
 
-      {/* Send Button */}
       <button
-        onClick={sendRequest}
+        onClick={() => requestMutation?.mutate()}
+        disabled={requestMutation?.isPending}
         className="bg-blue-600 text-white px-4 py-2"
       >
-        Send Request
+        {requestMutation.isPending ? "Sending..." : "Send Request"}
       </button>
 
       {/* Response */}
       <div className="mt-4">
-        <h3 className="font-bold mb-2">Response</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-bold">Response</h3>
+
+          <button
+            onClick={() =>
+              copyToClipboard(
+                JSON.stringify(requestMutation.data, null, 2),
+                "Response copied to clipboard",
+              )
+            }
+            className="text-xs bg-gray-800 text-white px-2 py-1 rounded"
+          >
+            Copy Response
+          </button>
+        </div>
 
         <pre className="bg-black text-white p-4 rounded-md overflow-auto max-h-96">
-          {loading ? "Loading..." : JSON.stringify(response, null, 2)}
+          {requestMutation.isPending
+            ? "Loading..."
+            : requestMutation.data
+              ? JSON.stringify(requestMutation.data, null, 2)
+              : "No response yet"}
         </pre>
       </div>
 
-      {/* SNIPPET CONTROLS */}
+      {/* SNIPPET */}
       <div className="mt-6 space-y-2">
-        <h3 className="font-bold">Code Snippet</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold">Code Snippet</h3>
+
+          <button
+            onClick={() => copyToClipboard(snippet, "cURL copied!")}
+            className="text-xs bg-gray-800 text-white px-2 py-1 rounded"
+          >
+            Copy cURL
+          </button>
+        </div>
 
         <select
           value={snippetType}

@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_REGISTRY } from "@/api/api-registry";
+import { Chart } from "@/components/ui/chart";
+import { useApiHistory } from "@/store/api-history";
 import { Link } from "react-router-dom";
 
 export function Dashboard() {
   const totalApis = API_REGISTRY.length;
+   const history = useApiHistory((state) => state.history);
+   console.log(history)
   const totalEndpoints = API_REGISTRY.reduce((acc, api) => {
     return acc + (api.spec?.paths ? Object.keys(api.spec.paths).length : 0);
   }, 0);
+
 
   return (
     <div className="p-6 space-y-6">
@@ -69,6 +75,10 @@ export function Dashboard() {
           ))}
         </div>
       </div>
+
+      {/* Chart */}
+
+      <Chart data={history}/>
 
     </div>
   );

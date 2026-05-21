@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DummyJSON API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dummyjson.com"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Test endpoint",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  }
+}
