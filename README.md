@@ -1,5 +1,6 @@
 # Developer Portal
 
+**Live demo:** [https://developer-p.netlify.app/login](https://developer-p.netlify.app/login)
 
 ## Quick start (under 2 minutes)
 
@@ -30,8 +31,6 @@ Copy `.env.example` to `.env` and set:
 |----------|-------------|
 | `VITE_SUPABASE_URL` | Supabase project URL (Settings → API) |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anonymous/public key |
-
-Never commit `.env` or real secrets.
 
 ### Supabase setup
 
@@ -137,11 +136,6 @@ src/api/payments/
 }
 ```
 
-**Tips:**
-
-- Use real `servers[].url` or rely on `baseUrl` in the registry (sandbox uses `baseUrl` + path from the spec).
-- Path parameters: use `{id}` in the path; they appear as editable fields in the sandbox.
-- Query parameters and request bodies defined in the spec render automatically in docs and sandbox.
 
 ### Step 2 — Import the spec in `api-registry.ts`
 
@@ -181,27 +175,8 @@ Append to `API_REGISTRY`:
 | `docsFile` | No | Path to markdown quickstart (fetched at runtime) |
 | `sdkLinks` | No | SDK / library links on docs page |
 
-### Step 4 — Optional: Getting Started markdown
 
-If you set `docsFile`, add the file at the path you referenced, e.g.:
-
-```text
-src/api/payments/docs.md
-```
-
-Example content:
-
-```markdown
-# Payments API — Getting Started
-
-1. Create an API key in **API Keys**.
-2. Open **Sandbox**, select **Payments API**, pick an endpoint.
-3. Send a request; your session token is sent as `Authorization: Bearer`.
-```
-
-The docs page renders this via `ApiMarkdown`.
-
-### Step 5 — Verify (reviewer checklist)
+### Step 4 — Verify (reviewer checklist)
 
 1. Restart dev server if it was running: `npm run dev`.
 2. **Sidebar** — new API name appears under **APIs**.
@@ -211,18 +186,10 @@ The docs page renders this via `ApiMarkdown`.
 
 No edits to `ApiDocs`, `Sandbox`, `Sidebar` (beyond registry), or `search-command` are required.
 
-### Step 6 — Optional: changelog & status
-
-If you want the new API on **Changelog** and **Status** pages:
-
-- Add entries to `src/lib/change-log.ts` (use the same `api` display string as `name` in the registry).
-- Add an object to `src/lib/api-status.ts` with the same `id` as the registry.
-- Add an `<option>` in `src/pages/change-log.tsx` filter dropdown matching the API display name.
-
-These are data files only — still no documentation component changes.
 
 ---
 ## Repository
 
+- **Live site:** https://developer-p.netlify.app/login
 - **GitHub:** https://github.com/rds2398/developer-portal
 
