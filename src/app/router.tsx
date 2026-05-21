@@ -8,6 +8,8 @@ import { AppLayout } from "@/layout/app-layout";
 import { ApiDocs } from "@/pages/api-docs";
 import { Sandbox } from "@/pages/sandbox";
 import { ApiKeys } from "@/pages/api-key";
+import { StatusPage } from "@/pages/status";
+import { ChangelogPage } from "@/pages/change-log";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ export const router = createBrowserRouter([
       {
         path: "api-keys",
         element: <ApiKeys />,
+      },
+      {
+        path: "status",
+        element: <StatusPage />,
+      },
+      {
+        path: "changelog",
+        element: <ChangelogPage />,
       },
       {
         path: "api/:apiId",

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_REGISTRY } from "@/api/api-registry";
 import { extractEndpoints } from "@/lib/endpoint-utils";
 import type { Endpoint } from "@/lib/endpoint-utils";
@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useApiHistory } from "@/store/api-history";
 export function Sandbox() {
   const { addHistory } = useApiHistory.getState();
+  const history = useApiHistory((state) => state.history);
   const [session, setSession] = useState<any>(null);
   const [selectedApi, setSelectedApi] = useState("pokeapi");
   const [selectedEndpoint, setSelectedEndpoint] = useState<Endpoint | null>(
@@ -37,6 +38,30 @@ export function Sandbox() {
   const endpoints = useMemo(() => {
     return extractEndpoints(api.spec);
   }, [api]);
+
+  const RATE_LIMIT = 20;
+
+  const WINDOW_SECONDS = 60;
+
+  const [rateUsed, setRateUsed] = useState(0);
+
+  const [resetCountdown, setResetCountdown] = useState(WINDOW_SECONDS);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setResetCountdown((prev) => {
+        if (prev <= 1) {
+          setRateUsed(0);
+
+          return WINDOW_SECONDS;
+        }
+
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   async function getSessionToken() {
     const { data } = await supabase.auth.getSession();
@@ -77,6 +102,20 @@ export function Sandbox() {
         status: response?.status,
         latency: response?.latency,
         timestamp: Date.now(),
+
+        headers,
+        body,
+
+        endpoint: selectedEndpoint,
+        pathValues,
+        queryValues,
+
+        response,
+      });
+      setRateUsed((prev) => {
+        if (prev >= RATE_LIMIT) return RATE_LIMIT;
+
+        return prev + 1;
       });
     },
   });
@@ -116,15 +155,94 @@ export function Sandbox() {
     toast.success(label);
   }
 
+  function replayRequest(item: any) {
+    setSelectedEndpoint(item.endpoint);
+
+    setHeaders(item.headers || {});
+
+    setBody(item.body || "");
+
+    setPathValues(item.pathValues || {});
+
+    setQueryValues(item.queryValues || {});
+
+    toast.success("Request restored");
+  }
+
+  function exportHAR() {
+    const history = useApiHistory.getState().history || [];
+
+    const har = {
+      log: {
+        version: "1.2",
+        creator: {
+          name: "Developer Portal",
+          version: "1.0",
+        },
+
+        entries: history.map((item: any) => ({
+          startedDateTime: new Date(item.timestamp).toISOString(),
+
+          time: item.latency,
+
+          request: {
+            method: item.method,
+            url: item.url,
+
+            headers: Object.entries(item.headers || {}).map(
+              ([name, value]) => ({
+                name,
+                value,
+              }),
+            ),
+
+            postData: {
+              mimeType: "application/json",
+              text: item.body || "",
+            },
+          },
+
+          response: {
+            status: item.status,
+
+            content: {
+              mimeType: "application/json",
+
+              text: JSON.stringify(item.response || {}),
+            },
+          },
+        })),
+      },
+    };
+
+    const blob = new Blob([JSON.stringify(har, null, 2)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = "sandbox.har";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    toast.success("HAR exported");
+  }
+
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-xl font-bold">API Sandbox</h1>
+      <h1 className="text-2xl md:text-3xl font-bold">API Sandbox</h1>
 
       {/* API Selector */}
       <select
         value={selectedApi}
         onChange={(e) => setSelectedApi(e.target.value)}
-        className="border p-2"
+        className="border p-2 cursor-pointer"
       >
         {API_REGISTRY.map((api) => (
           <option key={api.id} value={api.id}>
@@ -226,7 +344,7 @@ export function Sandbox() {
       <button
         onClick={() => requestMutation?.mutate()}
         disabled={requestMutation?.isPending}
-        className="bg-blue-600 text-white px-4 py-2"
+        className="bg-blue-600 text-white px-4 py-2 cursor-pointer"
       >
         {requestMutation.isPending ? "Sending..." : "Send Request"}
       </button>
@@ -243,7 +361,7 @@ export function Sandbox() {
                 "Response copied to clipboard",
               )
             }
-            className="text-xs bg-gray-800 text-white px-2 py-1 rounded"
+            className="text-xs bg-gray-800 text-white px-2 py-1 rounded cursor-pointer"
           >
             Copy Response
           </button>
@@ -258,6 +376,109 @@ export function Sandbox() {
         </pre>
       </div>
 
+      {/* RATE LIMIT VISUALISER */}
+      <div className="mt-6 border rounded-lg p-4 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <h3 className="font-bold text-lg">Rate Limit Usage</h3>
+
+          <div className="text-sm text-gray-500">
+            Resets in {resetCountdown}s
+          </div>
+        </div>
+
+        {/* Progress */}
+        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-blue-600 transition-all duration-300"
+            style={{
+              width: `${(rateUsed / RATE_LIMIT) * 100}%`,
+            }}
+          />
+        </div>
+
+        <div className="flex items-center justify-between text-sm text-gray-600">
+          <span>
+            {rateUsed} / {RATE_LIMIT} requests used
+          </span>
+
+          <span>{Math.max(RATE_LIMIT - rateUsed, 0)} remaining</span>
+        </div>
+      </div>
+
+      {/* REQUEST HISTORY */}
+      <div className="mt-6 border rounded-lg p-4 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h3 className="font-bold text-lg">Sandbox Request Log</h3>
+
+          <button
+            onClick={exportHAR}
+            className="bg-gray-600 text-white px-3 py-2 rounded text-sm cursor-pointer"
+          >
+            Export HAR
+          </button>
+        </div>
+
+        {history.length === 0 ? (
+          <div className="text-sm text-gray-500">No requests yet</div>
+        ) : (
+          <div className="space-y-3">
+            {history.map((item: any, idx: number) => (
+              <div
+                key={idx}
+                className="
+            border
+            rounded-lg
+            p-4
+            flex
+            flex-col
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+            gap-4
+          "
+              >
+                <div className="space-y-2 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2 py-1 bg-blue-600 text-white rounded text-xs">
+                      {item.method}
+                    </span>
+
+                    <span className="font-mono text-sm break-all">
+                      {item.url}
+                    </span>
+                  </div>
+
+                  <div className="flex gap-4 text-xs text-gray-500 flex-wrap">
+                    <span>Status: {item.status}</span>
+
+                    <span>{item.latency} ms</span>
+
+                    <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => replayRequest(item)}
+                  className="
+              bg-blue-600
+              text-white
+              px-3
+              py-2
+              rounded
+              text-sm
+              w-full
+              lg:w-auto
+              cursor-pointer
+            "
+                >
+                  Replay
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* SNIPPET */}
       <div className="mt-6 space-y-2">
         <div className="flex items-center justify-between">
@@ -265,7 +486,7 @@ export function Sandbox() {
 
           <button
             onClick={() => copyToClipboard(snippet, "cURL copied!")}
-            className="text-xs bg-gray-800 text-white px-2 py-1 rounded"
+            className="text-xs bg-gray-800 text-white px-2 py-1 rounded cursor-pointer"
           >
             Copy cURL
           </button>
