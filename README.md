@@ -1,6 +1,6 @@
 # Developer Portal
 
-**Live demo:** [https://6a0ee2477ccce9009a0ea26f--developer-p.netlify.app/login](https://6a0ee2477ccce9009a0ea26f--developer-p.netlify.app/login)
+**Live demo:** [https://developer-p.netlify.app/](https://developer-p.netlify.app/)
 
 ## Quick start (under 2 minutes)
 
@@ -190,6 +190,6 @@ No edits to `ApiDocs`, `Sandbox`, `Sidebar` (beyond registry), or `search-comman
 ---
 ## Repository
 
-- **Live site:** https://6a0ee2477ccce9009a0ea26f--developer-p.netlify.app/login
+- **Live site:** https://developer-p.netlify.app/
 - **GitHub:** https://github.com/rds2398/developer-portal
 
